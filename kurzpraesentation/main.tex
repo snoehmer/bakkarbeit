@@ -1,0 +1,152 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ngerman}
+\usepackage{graphicx}
+
+\usetheme{Warsaw}
+\useinnertheme{circles}
+\useoutertheme{smoothbars}
+\setbeamercovered{transparent}
+
+\title{Journal Club: \emph{Hex-o-Spell}}
+\titlegraphic{\includegraphics[width=1.5cm]{img/TUG}}
+\author{Stefan Nöhmer}
+\date{06.12.2010}
+
+
+\begin{document}
+
+	\frame{\titlepage}
+	
+	\begin{frame}{Paper}
+	  
+	  \begin{block}{\textbf{A Note on Brain Actuated Spelling with the Berlin Brain-Computer Interface}}
+	    B. Blankertz, M. Krauledat, G. Dornhege, John Williamson, Roderick Murray-Smith, K.-R. Müller
+	    
+	    Universal Access in Human-Computer Interaction. Ambient Interaction
+	    
+      4th International Conference on Universal Access in Human-Computer Interaction, UAHCI 2007
+      
+      Lecture Notes in Computer Science (Volume 4555, 2007)
+    \end{block}
+  \end{frame}
+	
+	\section{Inhaltsübersicht}
+	\frame{\tableofcontents}
+	
+	
+	\section[Brain Actuated Spelling]{A Note on Brain Actuated Spelling with the Berlin Brain-Computer Interface}
+		
+		\subsection{Einführung}
+		\begin{frame}[<+->]{BCIs und Buchstabieren}
+			\begin{block}{}
+				\begin{itemize}
+					\item wichtige Anwendung neben Kontrolle von Prothesen
+					\item bereits mehrere funktionierende Varianten
+					\item Thübingen: binäre Suche (ca. 0.5 Zeichen/min)
+					\item Graz: binäre Suche, verändertes BCI (ca. 1 Zeichen/min)
+					\item 2 parallele Buchstabenströme (über 2 Zeichen/min)
+					\item 6x6-Matrix, blinkende Zeilen/Spalten (bis 6 Zeichen/min)
+				\end{itemize}
+			\end{block}
+		\end{frame}
+		
+		\begin{frame}[<+->]{Hex-o-Spell}
+		  \begin{block}{}
+		    \begin{itemize}
+		      \item ursprüngliche Idee: Hex-System (PDA)
+		      \item buchstabenweiser Aufbau von Wörtern \& Sätzen
+		      \item Buchstaben werden nach deren Wahrscheinlichkeit angeordnet
+		    \end{itemize}
+		  \end{block}
+		\end{frame}
+
+		\subsection{Methoden}
+		\begin{frame}[<+->]{Berlin Brain-Computer Interface \emph{BBCI}}
+		  \begin{block}{}
+		    \begin{itemize}
+		      \item erkennt Änderungen im EEG
+		      \item ausgelöst durch die Vorstellungen von Bewegungen
+		      \item hier: Unterscheidung Hand-/Fußbewegung
+		    \end{itemize}
+		  \end{block}
+		\end{frame}
+		
+		\begin{frame}[<+->]{Buchstabeneingabe}
+		  \begin{block}{}
+		    \begin{itemize}
+		      \item dargestellt durch 6 Sechsecke
+		      \item pro Sechseck 5 Buchstaben (inkl. Backspace etc.)
+		      \item Auswahl eines Sechsecks durch Pfeil in der Mitte
+		      \item mögliche Bewegungen: Pfeil drehen/Pfeil verlängern
+		      \item nächster Schritt: pro Sechseck nur mehr 1 Buchstabe
+		    \end{itemize}
+		  \end{block}
+		  
+		  \begin{center}
+	      \includegraphics[width=0.80\textwidth]{img/hexospell.png}
+	      \label{fig:hexospell}
+      \end{center}
+		\end{frame}
+		
+		\begin{frame}[<+->]{Buchstabenanordnung}
+		  \begin{block}{}
+		    \begin{itemize}
+		      \item Buchstaben werden nach ihrer Wahrscheinlichkeit angeordnet
+		      \item dadurch steigt Eingabegeschwindigkeit
+		      \item Berechnung der WS aufgrund der vorangegangenen Buchstaben des Wortes
+		    \end{itemize}
+		  \end{block}
+		\end{frame}
+		
+		\subsection{Ergebnisse}
+		\begin{frame}[<+->]{Demonstration auf der Cebit}
+		  \begin{block}{}
+		    \begin{itemize}
+		      \item Live-Demonstration auf der Cebit 2006
+		      \item 2 Probanden gleichzeitig
+		      \item bis zu 5 Zeichen/min bzw. über 7 Zeichen/min
+		      \item einwandfreie Funktion trotz Störquellen in Umgebung
+		    \end{itemize}
+		  \end{block}
+		\end{frame}
+		
+				
+  \section{Aufbau des Papers}
+    
+    \subsection{Aufbau des Papers}
+    \begin{frame}[<+->]{Aufbau des Papers}
+      \begin{block}{}
+        \begin{itemize}
+          \item \textbf{Abstract:}
+            kurze Beschreibung des gesamten Papers
+          
+          \item \textbf{Introduction:} 
+            Erklärung BCIs, bisherige Texteingabemethoden, Idee von Hex-o-Spell
+            
+          \item \textbf{Methods:}
+            Funktionsweise BBCI, Bedienung, Eingabe von Buchstaben, Sprachmodell, Design von Hex-o-Spell
+            
+          \item \textbf{Results:}
+            Funktion bei einer Live-Demonstration, erreichte Geschwindigkeit
+            
+          \item \textbf{Discussion:}
+            Vergleich mit anderen Verfahren, Vorteile von Hex-o-Spell
+            
+          \item \textbf{References:}
+            alle Referenzen aus dem Paper
+        \end{itemize}
+      \end{block}
+    \end{frame}
+  
+				
+		% --- Ende ---
+		\begin{frame}
+			\begin{center}
+				\begin{large}
+					Danke für die Aufmerksamkeit!
+				\end{large}
+			\end{center}
+		\end{frame}
+
+\end{document}
