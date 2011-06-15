@@ -8,136 +8,124 @@
 \useoutertheme{smoothbars}
 \setbeamercovered{transparent}
 
-\title{Journal Club: \emph{Hex-o-Spell}}
+\title{Computer Vision Algorithmen auf einem DSP}
 \titlegraphic{\includegraphics[width=1.5cm]{img/TUG}}
-\author{Stefan Nöhmer}
-\date{06.12.2010}
+\author{Thomas Ebner, Stefan Nöhmer}
+\date{15.06.2011}
 
 
 \begin{document}
 
 	\frame{\titlepage}
 	
-	\begin{frame}{Paper}
+% ============================= Stefan Part ================================
+	
+	\section{Einleitung}
+	\begin{frame}{Einleitung}
 	  
-	  \begin{block}{\textbf{A Note on Brain Actuated Spelling with the Berlin Brain-Computer Interface}}
-	    B. Blankertz, M. Krauledat, G. Dornhege, John Williamson, Roderick Murray-Smith, K.-R. Müller
+	  \begin{block}{\textbf{Hardware}}
+	    BeagleBoard-xM
 	    
-	    Universal Access in Human-Computer Interaction. Ambient Interaction
-	    
-      4th International Conference on Universal Access in Human-Computer Interaction, UAHCI 2007
+      \texttt{www.beagleboard.org}
       
-      Lecture Notes in Computer Science (Volume 4555, 2007)
+      TI OMAP Prozessor: ARM CPU, GPU, DSP
     \end{block}
+    
+    \begin{block}{\textbf{Algorithmen}}
+      Computer Vision Algorithmen zur Featureerkennung
+      
+      \begin{itemize}
+        \item \emph{Harris Corner Detector}
+        \item \emph{SIFT}
+      \end{itemize}
+    \end{block}
+
   \end{frame}
 	
-	\section{Inhaltsübersicht}
-	\frame{\tableofcontents}
 	
-	
-	\section[Brain Actuated Spelling]{A Note on Brain Actuated Spelling with the Berlin Brain-Computer Interface}
+	\section{Hardware}
 		
-		\subsection{Einführung}
-		\begin{frame}[<+->]{BCIs und Buchstabieren}
-			\begin{block}{}
-				\begin{itemize}
-					\item wichtige Anwendung neben Kontrolle von Prothesen
-					\item bereits mehrere funktionierende Varianten
-					\item Thübingen: binäre Suche (ca. 0.5 Zeichen/min)
-					\item Graz: binäre Suche, verändertes BCI (ca. 1 Zeichen/min)
-					\item 2 parallele Buchstabenströme (über 2 Zeichen/min)
-					\item 6x6-Matrix, blinkende Zeilen/Spalten (bis 6 Zeichen/min)
-				\end{itemize}
-			\end{block}
-		\end{frame}
-		
-		\begin{frame}[<+->]{Hex-o-Spell}
-		  \begin{block}{}
-		    \begin{itemize}
-		      \item ursprüngliche Idee: Hex-System (PDA)
-		      \item buchstabenweiser Aufbau von Wörtern \& Sätzen
-		      \item Buchstaben werden nach deren Wahrscheinlichkeit angeordnet
-		    \end{itemize}
-		  \end{block}
-		\end{frame}
-
-		\subsection{Methoden}
-		\begin{frame}[<+->]{Berlin Brain-Computer Interface \emph{BBCI}}
-		  \begin{block}{}
-		    \begin{itemize}
-		      \item erkennt Änderungen im EEG
-		      \item ausgelöst durch die Vorstellungen von Bewegungen
-		      \item hier: Unterscheidung Hand-/Fußbewegung
-		    \end{itemize}
-		  \end{block}
-		\end{frame}
-		
-		\begin{frame}[<+->]{Buchstabeneingabe}
-		  \begin{block}{}
-		    \begin{itemize}
-		      \item dargestellt durch 6 Sechsecke
-		      \item pro Sechseck 5 Buchstaben (inkl. Backspace etc.)
-		      \item Auswahl eines Sechsecks durch Pfeil in der Mitte
-		      \item mögliche Bewegungen: Pfeil drehen/Pfeil verlängern
-		      \item nächster Schritt: pro Sechseck nur mehr 1 Buchstabe
-		    \end{itemize}
-		  \end{block}
-		  
-		  \begin{center}
-	      \includegraphics[width=0.80\textwidth]{img/hexospell.png}
-	      \label{fig:hexospell}
+		\subsection{BeagleBoard-xM}
+		\begin{frame}{BeagleBoard-xM Übersicht}
+			\begin{center}
+        \includegraphics[height=0.7\paperheight]{./img/beagleboard-xm.png}
       \end{center}
 		\end{frame}
 		
-		\begin{frame}[<+->]{Buchstabenanordnung}
-		  \begin{block}{}
+		\begin{frame}{Verfügbare Ressourcen}
+		  \begin{block}{TI OMAP}
 		    \begin{itemize}
-		      \item Buchstaben werden nach ihrer Wahrscheinlichkeit angeordnet
-		      \item dadurch steigt Eingabegeschwindigkeit
-		      \item Berechnung der WS aufgrund der vorangegangenen Buchstaben des Wortes
+		      \item CPU: ARM Cortex-A8 (max. 1GHz)
+		      \item Grafikbeschleuniger PowerSGX
+		      \item Signalprozessor C64x+
+		      \item 512MB RAM
+		      \item Kamera mit 3MP
 		    \end{itemize}
 		  \end{block}
-		\end{frame}
-		
-		\subsection{Ergebnisse}
-		\begin{frame}[<+->]{Demonstration auf der Cebit}
-		  \begin{block}{}
-		    \begin{itemize}
-		      \item Live-Demonstration auf der Cebit 2006
-		      \item 2 Probanden gleichzeitig
-		      \item bis zu 5 Zeichen/min bzw. über 7 Zeichen/min
-		      \item einwandfreie Funktion trotz Störquellen in Umgebung
-		    \end{itemize}
-		  \end{block}
-		\end{frame}
-		
-				
-  \section{Aufbau des Papers}
-    
-    \subsection{Aufbau des Papers}
-    \begin{frame}[<+->]{Aufbau des Papers}
-      \begin{block}{}
+		  
+		  \begin{block}{Software}
         \begin{itemize}
-          \item \textbf{Abstract:}
-            kurze Beschreibung des gesamten Papers
-          
-          \item \textbf{Introduction:} 
-            Erklärung BCIs, bisherige Texteingabemethoden, Idee von Hex-o-Spell
-            
-          \item \textbf{Methods:}
-            Funktionsweise BBCI, Bedienung, Eingabe von Buchstaben, Sprachmodell, Design von Hex-o-Spell
-            
-          \item \textbf{Results:}
-            Funktion bei einer Live-Demonstration, erreichte Geschwindigkeit
-            
-          \item \textbf{Discussion:}
-            Vergleich mit anderen Verfahren, Vorteile von Hex-o-Spell
-            
-          \item \textbf{References:}
-            alle Referenzen aus dem Paper
+          \item Ubuntu Linux 11.04 für ARM
+          \item spezielle Kernelmodule für TI OMAP
+          \item Grafikbeschleunigung durch GPU
+          \item Algorithmen auf DSP implementiert
         \end{itemize}
       \end{block}
-    \end{frame}
+		\end{frame}
+
+		\subsection{TI OMAP Aufbau}
+		\begin{frame}{TI OMAP Überblick}
+		  \begin{center}
+        \includegraphics[height=0.7\paperheight]{./img/ti-omap.jpg}
+      \end{center}
+		\end{frame}
+		
+		\begin{frame}{TI OMAP Funktion}
+		  \begin{block}{Eigenschaften des DSP}
+		    \begin{itemize}
+		      \item VLIW-Architektur
+		      \item mehrere Funktionseinheiten:
+		      \begin{itemize}
+            \item Addierer
+            \item Multiplizierer
+            \item Bitweise Operationen
+          \end{itemize}
+		      \item schnelle, parallelisierbare Verarbeitung
+		      \item ideal für Computer Vision Algorithmen
+		      \item Beispiel: Faltung am DSP sehr effektiv
+		    \end{itemize}
+		  \end{block}
+		  
+		  \begin{block}{Kommunikation zur CPU}
+	      \begin{itemize}
+          \item Kontrollnachrichten via \emph{Mailboxes}
+          \item Datenaustausch über Buffer im RAM
+        \end{itemize}
+      \end{block}
+		\end{frame}
+		
+		\begin{frame}{Programmierung}
+		  \begin{block}{CPU}
+		    \begin{itemize}
+          \item Standard-Compiler \texttt{arm-gcc}
+		      \item in C/C++
+		    \end{itemize}
+		  \end{block}
+		  
+		  \begin{block}{DSP}
+        \begin{itemize}
+          \item spezieller VLIW-Compiler von TI
+          \item in C/C++
+          \item Compiler übernimmt Optimierung/Aufteilung
+        \end{itemize}
+      \end{block}
+		\end{frame}
+		
+% =============================== Tom Part ==================================
+		
+  \section{Algorithmen}
+    
+    
   
 				
 		% --- Ende ---
