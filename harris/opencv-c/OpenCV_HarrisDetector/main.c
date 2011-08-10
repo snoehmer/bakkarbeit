@@ -34,11 +34,11 @@ int main (int argc, char *argv[])
 
   // (1)Corner detection using cvCornerMinEigenVal
   cvGoodFeaturesToTrack (src_img_gray, eig_img, temp_img, corners, &corner_count, 0.1, 15, NULL, 3, 0, 0.04);
-  cvFindCornerSubPix (src_img_gray, corners, corner_count,
-            cvSize (3, 3), cvSize (-1, -1), cvTermCriteria (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03));
+  //cvFindCornerSubPix (src_img_gray, corners, corner_count, cvSize (3, 3), cvSize (-1, -1), cvTermCriteria (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03));
+
   // (2)Draw the detected corner
   for (i = 0; i < corner_count; i++)
-  cvCircle (dst_img1, cvPointFrom32f (corners[i]), 3, CV_RGB (255, 0, 0), 2, 8, 0);
+    cvCircle (dst_img1, cvPointFrom32f (corners[i]), 3, CV_RGB (255, 0, 0), 2, 8, 0);
 
   //Message for debugging
   printf("MinEigenVal corner count = %d\n", corner_count);
@@ -46,11 +46,11 @@ int main (int argc, char *argv[])
   // (3)Corner detection using cvCornerHarris
   corner_count = 150;
   cvGoodFeaturesToTrack (src_img_gray, eig_img, temp_img, corners, &corner_count, 0.1, 15, NULL, 3, 1, 0.01);
-  cvFindCornerSubPix (src_img_gray, corners, corner_count,
-            cvSize (3, 3), cvSize (-1, -1), cvTermCriteria (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03));
+  //cvFindCornerSubPix (src_img_gray, corners, corner_count, cvSize (3, 3), cvSize (-1, -1), cvTermCriteria (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03));
+
   // (4)Draw the detected corner
   for (i = 0; i < corner_count; i++)
-  cvCircle (dst_img2, cvPointFrom32f (corners[i]), 3, CV_RGB (0, 0, 255), 2, 8, 0);
+    cvCircle (dst_img2, cvPointFrom32f (corners[i]), 3, CV_RGB (0, 0, 255), 2, 8, 0);
 
   //Message for debugging
   printf("Harris corner count = %d\n", corner_count);
