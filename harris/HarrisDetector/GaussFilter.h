@@ -75,13 +75,13 @@ public:
 
 
 private:
-    unsigned char *input;
-    unsigned char *output;
-    float *kernel;
-    float sigma;
-    int kernelSize;
-    int height;
-    int width;
+    unsigned char *input_;
+    unsigned char *output_;
+    float *kernel_;
+    float sigma_;
+    int kernelSize_;
+    int height_;
+    int width_;
 
     /**
      * extends the image beyond its borders for the convolution

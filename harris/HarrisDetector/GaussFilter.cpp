@@ -13,52 +13,52 @@
 GaussFilter::GaussFilter(int kernelSize, float sigma)
 {
     if(kernelSize % 2 != 0)
-        this->kernelSize = kernelSize;
+        kernelSize_ = kernelSize;
     else
-        this->kernelSize = kernelSize - 1;
+        kernelSize_ = kernelSize - 1;
 
-    this->sigma = sigma;
+    sigma_ = sigma;
 
-    input = 0;
-    kernel = 0;
-    output = 0;
+    input_ = 0;
+    kernel_ = 0;
+    output_ = 0;
 }
 
 
 GaussFilter::GaussFilter(unsigned char *original, int width, int height, int kernelSize, float sigma)
 {
     if(kernelSize % 2 != 0)
-        this->kernelSize = kernelSize;
+        kernelSize_ = kernelSize;
     else
-        this->kernelSize = kernelSize - 1;
+        kernelSize_ = kernelSize - 1;
 
-    this->sigma = sigma;
+    sigma_ = sigma;
 
     inputImage(original, width, height);
 
-    kernel = 0;
-    output = 0;
+    kernel_ = 0;
+    output_ = 0;
 }
 
 
 GaussFilter::~GaussFilter()
 {
-    if(kernel)
+    if(kernel_)
     {
-        delete[] kernel;
-        kernel = 0;
+        delete[] kernel_;
+        kernel_ = 0;
     }
 
-    if(input)
+    if(input_)
     {
-        delete[] input;
-        input = 0;
+        delete[] input_;
+        input_ = 0;
     }
 
-    if(output)
+    if(output_)
     {
-        delete[] output;
-        output = 0;
+        delete[] output_;
+        output_ = 0;
     }
 }
 
@@ -67,35 +67,35 @@ void GaussFilter::generateKernel()
 {
     int row;
     int col;
-    int center = (kernelSize - 1) / 2;
+    int center = (kernelSize_ - 1) / 2;
     int xc2;  // = (x - center)^2
     int yc2;
-    float sigma2 = sigma * sigma;
+    float sigma2 = sigma_ * sigma_;
 
     float sum = 0;  // needed for normalization
 
-    kernel = new float[kernelSize * kernelSize];
+    kernel_ = new float[kernelSize_ * kernelSize_];
 
     // step 1: calculate Gauss function for kernel
-    for(row = 0; row < kernelSize; row++)
+    for(row = 0; row < kernelSize_; row++)
     {
-        for(col = 0; col < kernelSize; col++)
+        for(col = 0; col < kernelSize_; col++)
         {
             xc2 = (col - center) * (col - center);
             yc2 = (row - center) * (row - center);
 
-            kernel[row * kernelSize + col] = 1.0f / (2 * M_PI * sigma2) * exp(((float) -(xc2 + yc2))/(2 * sigma2));
+            kernel_[row * kernelSize_ + col] = 1.0f / (2 * M_PI * sigma2) * exp(((float) -(xc2 + yc2))/(2 * sigma2));
 
-            sum += kernel[row * kernelSize + col];
+            sum += kernel_[row * kernelSize_ + col];
         }
     }
 
     // step 2: normalize kernel
-    for(row = 0; row < kernelSize; row++)
+    for(row = 0; row < kernelSize_; row++)
     {
-        for(col = 0; col < kernelSize; col++)
+        for(col = 0; col < kernelSize_; col++)
         {
-            kernel[row * kernelSize + col] = kernel[row * kernelSize + col] / sum;
+            kernel_[row * kernelSize_ + col] = kernel_[row * kernelSize_ + col] / sum;
         }
     }
 }
@@ -103,19 +103,19 @@ void GaussFilter::generateKernel()
 
 void GaussFilter::inputImage(unsigned char *original, int width, int height)
 {
-    if(input)
+    if(input_)
     {
-        delete[] input;
-        input = 0;
+        delete[] input_;
+        input_ = 0;
     }
 
-    this->width = width;
-    this->height = height;
+    width_ = width;
+    height_ = height;
 
-    input = new unsigned char[width * height];
+    input_ = new unsigned char[width_ * height_];
 
     // copy original image to input buffer
-    memcpy(input, original, width * height * sizeof(unsigned char));
+    memcpy(input_, original, width_ * height_ * sizeof(unsigned char));
 }
 
 
@@ -123,12 +123,12 @@ void GaussFilter::calculate()
 {
     unsigned char *extendedImg = 0;
 
-    if(!kernel)
+    if(!kernel_)
         generateKernel();
 
-    if(!input)
+    if(!input_)
     {
-        output = 0;
+        output_ = 0;
         return;
     }
 
@@ -143,32 +143,26 @@ void GaussFilter::calculate()
 void GaussFilter::getFilteredImage(unsigned char **filtered, int *fWidth, int *fHeight)
 {
     if(fWidth != 0)
-        *fWidth = width;
+        *fWidth = width_;
 
     if(fHeight != 0)
-        *fHeight = height;
+        *fHeight = height_;
 
-    if(*filtered)
-    {
-        delete[] *filtered;
-        *filtered = 0;
-    }
-
-    if(!output)
+    if(!output_)
     {
         *filtered = 0;
         return;
     }
 
-    *filtered = new unsigned char[width * height];
+    *filtered = new unsigned char[width_ * height_];
 
-    memcpy(*filtered, output, width * height * sizeof(unsigned char));
+    memcpy(*filtered, output_, width_ * height_ * sizeof(unsigned char));
 }
 
 
 void GaussFilter::filterImage(unsigned char *image, unsigned char **result, int width, int height)
 {
-    if(!kernel)  // kernel not initialized!
+    if(!kernel_)  // kernel not initialized!
         generateKernel();
 
     inputImage(image, width, height);
@@ -182,10 +176,10 @@ void GaussFilter::extendImage(unsigned char **extendedImg)
     int row;
     int col;
 
-    int offset = (kernelSize - 1) / 2;
+    int offset = (kernelSize_ - 1) / 2;
 
-    int extWidth = width + 2 * offset;
-    int extHeight = height + 2 * offset;
+    int extWidth = width_ + 2 * offset;
+    int extHeight = height_ + 2 * offset;
 
     if(*extendedImg)
     {
@@ -196,49 +190,49 @@ void GaussFilter::extendImage(unsigned char **extendedImg)
     *extendedImg = new unsigned char[extWidth * extHeight];
 
     // step 0: copy image
-    for(row = 0; row < height; row++)
-        for(col = 0; col < width; col++)
-            (*extendedImg)[(row + offset) * extWidth + (col + offset)] = input[row * width + col];
+    for(row = 0; row < height_; row++)
+        for(col = 0; col < width_; col++)
+            (*extendedImg)[(row + offset) * extWidth + (col + offset)] = input_[row * width_ + col];
 
     // step 1a: copy upper border
     for(row = 0; row < offset; row++)
-        for(col = 0; col < width; col++)
-            (*extendedImg)[row * extWidth + (col + offset)] = input[0 * width + col];
+        for(col = 0; col < width_; col++)
+            (*extendedImg)[row * extWidth + (col + offset)] = input_[0 * width_ + col];
 
     // step 1b: copy lower border
-    for(row = offset + height; row < height + 2*offset; row++)
-        for(col = 0; col < width; col++)
-            (*extendedImg)[row * extWidth + (col + offset)] = input[(height - 1) * width + col];
+    for(row = offset + height_; row < height_ + 2*offset; row++)
+        for(col = 0; col < width_; col++)
+            (*extendedImg)[row * extWidth + (col + offset)] = input_[(height_ - 1) * width_ + col];
 
     // step 1c: copy left border
     for(col = 0; col < offset; col++)
-        for(row = 0; row < height; row++)
-            (*extendedImg)[(row + offset) * extWidth + col] = input[row * width + 0];
+        for(row = 0; row < height_; row++)
+            (*extendedImg)[(row + offset) * extWidth + col] = input_[row * width_ + 0];
 
     // step 1d: copy right border
-    for(col = offset + width; col < width + 2*offset; col++)
-        for(row = 0; row < height; row++)
-            (*extendedImg)[(row + offset) * extWidth + col] = input[row * width + (width - 1)];
+    for(col = offset + width_; col < width_ + 2*offset; col++)
+        for(row = 0; row < height_; row++)
+            (*extendedImg)[(row + offset) * extWidth + col] = input_[row * width_ + (width_ - 1)];
 
     // step 2a: copy upper left corner
     for(row = 0; row < offset; row++)
         for(col = 0; col < offset; col++)
-            (*extendedImg)[row * extWidth + col] = input[0 * width + 0];
+            (*extendedImg)[row * extWidth + col] = input_[0 * width_ + 0];
 
     // step 2b: copy upper right corner
     for(row = 0; row < offset; row++)
-        for(col = offset + width; col < width + 2*offset; col++)
-            (*extendedImg)[row * extWidth + col] = input[0 * width + (width - 1)];
+        for(col = offset + width_; col < width_ + 2*offset; col++)
+            (*extendedImg)[row * extWidth + col] = input_[0 * width_ + (width_ - 1)];
 
     // step 2c: copy lower left corner
-    for(row = offset + height; row < height + 2*offset; row++)
+    for(row = offset + height_; row < height_ + 2*offset; row++)
         for(col = 0; col < offset; col++)
-            (*extendedImg)[row * extWidth + col] = input[(height - 1) * width + 0];
+            (*extendedImg)[row * extWidth + col] = input_[(height_ - 1) * width_ + 0];
 
     // step 2d: copy lower right corner
-    for(row = offset + height; row < height + 2*offset; row++)
-        for(col = offset + width; col < width + 2*offset; col++)
-            (*extendedImg)[row * extWidth + col] = input[(height - 1) * width + (width - 1)];
+    for(row = offset + height_; row < height_ + 2*offset; row++)
+        for(col = offset + width_; col < width_ + 2*offset; col++)
+            (*extendedImg)[row * extWidth + col] = input_[(height_ - 1) * width_ + (width_ - 1)];
 }
 
 
@@ -251,20 +245,20 @@ void GaussFilter::filter(unsigned char *extendedImg)
     int row;  // row and col of image pixel for current kernel position
     int col;
 
-    int offset = (kernelSize - 1) / 2;
+    int offset = (kernelSize_ - 1) / 2;
 
-    int extWidth = width + 2 * offset;
-    int extHeight = height + 2 * offset;
+    int extWidth = width_ + 2 * offset;
+    int extHeight = height_ + 2 * offset;
 
     float gauss;
 
-    if(output)
+    if(output_)
     {
-        delete[] output;
-        output = 0;
+        delete[] output_;
+        output_ = 0;
     }
 
-    output = new unsigned char[width * height];
+    output_ = new unsigned char[width_ * height_];
 
     for(imgrow = offset; imgrow < extHeight - offset; imgrow++)
     {
@@ -273,18 +267,18 @@ void GaussFilter::filter(unsigned char *extendedImg)
             gauss = 0;
 
             // calculate weighted sum over kernel (convolution)
-            for(krow = 0; krow < kernelSize; krow++)
+            for(krow = 0; krow < kernelSize_; krow++)
             {
-                for(kcol = 0; kcol < kernelSize; kcol++)
+                for(kcol = 0; kcol < kernelSize_; kcol++)
                 {
                     row = imgrow + krow - offset;
                     col = imgcol + kcol - offset;
 
-                    gauss += extendedImg[row * extWidth + col] * kernel[krow * kernelSize + kcol];
+                    gauss += extendedImg[row * extWidth + col] * kernel_[krow * kernelSize_ + kcol];
                 }
             }
 
-            output[(imgrow - offset) * width + (imgcol - offset)] = (unsigned char) round(gauss);
+            output_[(imgrow - offset) * width_ + (imgcol - offset)] = (unsigned char) round(gauss);
         }
     }
 }
