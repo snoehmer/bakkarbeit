@@ -9,7 +9,10 @@
 #define HARRISCORNERDETECTOR_H_
 
 #include "GaussFilter.h"
+#include "HarrisCornerPoint.h"
+#include <vector>
 
+using namespace std;
 
 class HarrisCornerDetector
 {
@@ -48,9 +51,9 @@ public:
 
     /**
      * returns a list of detected corners
-     * @returns list of detected corners or NULL if the detector hasnt run yet
+     * @returns list of detected corners or an empty vector if the detector hasnt run yet
      */
-    void* getCorners();
+    vector<HarrisCornerPoint> getCorners();
 
     /**
      * returns an image of the strength of the detected corners
@@ -79,7 +82,7 @@ private:
     float threshold_;
     unsigned char *input_;
     unsigned char *cornerStrength_;  // the thresholded and scaled corner strength
-    //List of corners
+    vector<HarrisCornerPoint> cornerPoints_;
     GaussFilter gaussFilter_;  // used for filtering of derives
     float *kernelX_;
     float *kernelY_;
