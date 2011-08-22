@@ -12,6 +12,14 @@
 using namespace std;
 using namespace Magick;
 
+ImageBitstream::ImageBitstream(int width, int height)
+{
+	width_ = width;
+	height_ = height;
+
+	bitstream_ = new unsigned char[width_ * height_];
+}
+
 ImageBitstream ImageBitstream::convolve(float *kernel, int kernelSize)
 {
 	unsigned char *extendedImg;
@@ -61,6 +69,8 @@ ImageBitstream ImageBitstream::convolve(float *kernel, int kernelSize)
 			newImg.bitstream_[(imgrow - offset) * width_ + (imgcol - offset)] = (unsigned char) round(sum);
 		}
 	}
+
+	delete[] extendedImg;
 
 	return newImg;
 }
@@ -234,6 +244,7 @@ ImageBitstream ImageBitstream::stretchContrast()
 
 ImageBitstream::ImageBitstream(string filename)
 {
+	bitstream_ = 0;
 	setImage(filename);
 }
 
@@ -293,6 +304,7 @@ ImageBitstream::~ImageBitstream()
 
 ImageBitstream::ImageBitstream(Magick::Image img)
 {
+	bitstream_ = 0;
 	setImage(img);
 }
 
@@ -308,4 +320,17 @@ unsigned char *ImageBitstream::getBitstream()
 ImageBitstream::ImageBitstream()
 {
 	bitstream_ = 0;
+}
+
+
+ImageBitstream ImageBitstream::extend(int borderSize)
+{
+	ImageBitstream extendedImg;
+
+	extendedImg.width_ = width_ + 2 * borderSize;
+	extendedImg.height_ = height_ + 2 * borderSize;
+
+	extendedImg.bitstream_ = extendImage(borderSize);
+
+	return extendedImg;
 }

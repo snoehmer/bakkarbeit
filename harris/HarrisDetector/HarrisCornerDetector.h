@@ -27,7 +27,7 @@ public:
      * @param k parameter for Harris detector
      * @param thresh threshold for the corner strength
      */
-    HarrisCornerDetector(float dSigma = 0.5f, int dKernelSize = 5, float gSigma = 0.5f, int gKernelSize = 5, float k = 0.04f, float threshold = 1.0f);
+    HarrisCornerDetector(float dSigma = 0.5f, int kernelSize = 5, float gSigma = 0.5f, float k = 0.04f, float threshold = 1.0f);
 
     virtual ~HarrisCornerDetector();
 
@@ -42,24 +42,7 @@ public:
      * @param width the width of the input image
      * @param height the height of the input image
      */
-    void inputImage(unsigned char *input, int width, int height);
-
-    /**
-     * applies the edge detector to the input image
-     */
-    void calculate();
-
-    /**
-     * returns a list of detected corners
-     * @returns list of detected corners or an empty vector if the detector hasnt run yet
-     */
-    vector<HarrisCornerPoint> getCorners();
-
-    /**
-     * returns an image of the strength of the detected corners
-     * @param corners a raw bit stream of the corner image
-     */
-    void getCornerImage(unsigned char **corners, int *width = 0, int *height = 0);
+    void inputImage(ImageBitstream img);
 
     /**
      * performs a full Harris corner detection
@@ -69,27 +52,22 @@ public:
      * @param cornerList a list of the detected corners
      * @param corners a image with the corner strength
      */
-    void detectCorners(unsigned char *input, int width, int height, void *cornerList, unsigned char **corners);
+    ImageBitstream detectCorners(ImageBitstream img, vector<HarrisCornerPoint> &cornerList, float **hcr = 0);
 
 
 private:
 
     float devSigma_;
-    int devKernelSize_;
+    int kernelSize_;
     float gaussSigma_;
-    float gaussKernelSize_;
     float harrisK_;
     float threshold_;
-    unsigned char *input_;
-    unsigned char *cornerStrength_;  // the thresholded and scaled corner strength
-    vector<HarrisCornerPoint> cornerPoints_;
-    GaussFilter gaussFilter_;  // used for filtering of derives
-    float *kernelX_;
-    float *kernelY_;
-    int kernelSize_;
+    ImageBitstream input_;
+    float *devKernelX_;
+    float *devKernelY_;
+    float *gaussKernel_;
     int width_;
     int height_;
-    float *hcr_;  // the Harris corner response for every pixel
 
 
     /**
@@ -98,7 +76,7 @@ private:
      * extended by (kernelSize - 1)/2 pixels on each border
      * @returns the buffer containing the extended result
      */
-    unsigned char* extendImage();
+    float* extendImage(float *input, int borderSize);
 
     /**
      * performs the convolution with both derived kernels for every pixel
@@ -112,7 +90,7 @@ private:
      * @param hcr a raw bit stream of the harris corner response
      * @param cornerStrength the thresholded corner strength
      */
-    void performHarris(unsigned char *extendedImg, float threshold, float **hcr, unsigned char **cornerStrength);
+    ImageBitstream performHarris(float **hcr, vector<HarrisCornerPoint> &cornerPoints);
 
 };
 

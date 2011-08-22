@@ -27,6 +27,7 @@ public:
 	ImageBitstream(const ImageBitstream &original);  // copy constructor
 	ImageBitstream(Magick::Image img);
 	ImageBitstream(string filename);
+	ImageBitstream(int width, int height);
 	virtual ~ImageBitstream();
 
 	void setImage(Magick::Image img);
@@ -41,6 +42,7 @@ public:
 	unsigned char* copyBitstream();
 	unsigned char& pixel(int row, int col);
 
+	ImageBitstream extend(int borderSize);
 	ImageBitstream convolve(float *kernel, int kernelSize);
 	ImageBitstream stretchContrast();
 

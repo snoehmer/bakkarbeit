@@ -42,3 +42,13 @@ void HarrisCornerPoint::getCoordinates(int & row, int & col)
 	row = row_;
 	col = col_;
 }
+
+int HarrisCornerPoint::getCol()
+{
+	return col_;
+}
+
+int HarrisCornerPoint::getRow()
+{
+	return row_;
+}

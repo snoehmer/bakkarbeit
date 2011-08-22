@@ -19,6 +19,8 @@ public:
 	void getCoordinates(int &row, int &col);
 	void setStrength(float strength);
 	float getStrength();
+	int getCol();
+	int getRow();
 
 private:
 
