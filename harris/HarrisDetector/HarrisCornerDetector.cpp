@@ -7,8 +7,9 @@
 
 #include "HarrisCornerDetector.h"
 
-HarrisCornerDetector::HarrisCornerDetector(float dSigma, int dKernelSize,
-				float gSigma, int gKernelSize, float k, float threshold)
+using namespace std;
+
+HarrisCornerDetector::HarrisCornerDetector(float dSigma, int dKernelSize, float gSigma, int gKernelSize, float k, float threshold)
 {
 	devSigma_ = dSigma;
 	devKernelSize_ = dKernelSize;
@@ -33,47 +34,36 @@ HarrisCornerDetector::~HarrisCornerDetector()
 		delete cornerStrength_;
 }
 
-void
-HarrisCornerDetector::init()
+void HarrisCornerDetector::init()
 {
 }
 
-void
-HarrisCornerDetector::inputImage(unsigned char *input, int width, int height)
+void HarrisCornerDetector::inputImage(unsigned char *input, int width, int height)
 {
 }
 
-void
-HarrisCornerDetector::calculate()
+void HarrisCornerDetector::calculate()
 {
 }
 
-void *
-HarrisCornerDetector::getCorners()
+vector<HarrisCornerPoint> HarrisCornerDetector::getCorners()
 {
-	return 0;
+	return cornerPoints_;
 }
 
-void
-HarrisCornerDetector::getCornerImage(unsigned char **corners, int *width,
-				int *height)
+void HarrisCornerDetector::getCornerImage(unsigned char **corners, int *width, int *height)
 {
 }
 
-void
-HarrisCornerDetector::detectCorners(unsigned char *input, int width,
-				int height, void *cornerList, unsigned char **corners)
+void HarrisCornerDetector::detectCorners(unsigned char *input, int width, int height, void *cornerList, unsigned char **corners)
 {
 }
 
-unsigned char *
-HarrisCornerDetector::extendImage()
+unsigned char* HarrisCornerDetector::extendImage()
 {
 	return 0;
 }
 
-void
-HarrisCornerDetector::performHarris(unsigned char *extendedImg,
-				float threshold, float **hcr, unsigned char **cornerStrength)
+void HarrisCornerDetector::performHarris(unsigned char *extendedImg, float threshold, float **hcr, unsigned char **cornerStrength)
 {
 }

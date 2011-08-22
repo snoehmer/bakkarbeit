@@ -6,6 +6,7 @@
  */
 
 #include "ImageBitstream.h"
+#include <cmath>
 #include <Magick++.h>
 
 using namespace std;
@@ -74,8 +75,7 @@ int ImageBitstream::getHeight()
 
 unsigned char & ImageBitstream::pixel(int row, int col)
 {
-	if(row >= height_ || col >= width_)
-		return 0;
+	//if(row >= height_ || col >= width_) indexOutOfBounds!
 
 	return bitstream_[row * width_ + col];
 }
@@ -114,61 +114,61 @@ unsigned char *ImageBitstream::extendImage(int borderSize)
 {
 	int row;
 	int col;
-	unsigned char *extendedImage;
+	unsigned char *extendedImg;
 
 	int offset = borderSize;
 
 	int extWidth = width_ + 2 * offset;
 	int extHeight = height_ + 2 * offset;
 
-	*extendedImg = new unsigned char[extWidth * extHeight];
+	extendedImg = new unsigned char[extWidth * extHeight];
 
 	// step 0: copy image
 	for(row = 0; row < height_; row++)
 			for(col = 0; col < width_; col++)
-					extendedImg[(row + offset) * extWidth + (col + offset)] = input_[row * width_ + col];
+					extendedImg[(row + offset) * extWidth + (col + offset)] = bitstream_[row * width_ + col];
 
 	// step 1a: copy upper border
 	for(row = 0; row < offset; row++)
 			for(col = 0; col < width_; col++)
-					extendedImg[row * extWidth + (col + offset)] = input_[0 * width_ + col];
+					extendedImg[row * extWidth + (col + offset)] = bitstream_[0 * width_ + col];
 
 	// step 1b: copy lower border
 	for(row = offset + height_; row < height_ + 2*offset; row++)
 			for(col = 0; col < width_; col++)
-					extendedImg[row * extWidth + (col + offset)] = input_[(height_ - 1) * width_ + col];
+					extendedImg[row * extWidth + (col + offset)] = bitstream_[(height_ - 1) * width_ + col];
 
 	// step 1c: copy left border
 	for(col = 0; col < offset; col++)
 			for(row = 0; row < height_; row++)
-					extendedImg[(row + offset) * extWidth + col] = input_[row * width_ + 0];
+					extendedImg[(row + offset) * extWidth + col] = bitstream_[row * width_ + 0];
 
 	// step 1d: copy right border
 	for(col = offset + width_; col < width_ + 2*offset; col++)
 			for(row = 0; row < height_; row++)
-					extendedImg[(row + offset) * extWidth + col] = input_[row * width_ + (width_ - 1)];
+					extendedImg[(row + offset) * extWidth + col] = bitstream_[row * width_ + (width_ - 1)];
 
 	// step 2a: copy upper left corner
 	for(row = 0; row < offset; row++)
 			for(col = 0; col < offset; col++)
-					extendedImg[row * extWidth + col] = input_[0 * width_ + 0];
+					extendedImg[row * extWidth + col] = bitstream_[0 * width_ + 0];
 
 	// step 2b: copy upper right corner
 	for(row = 0; row < offset; row++)
 			for(col = offset + width_; col < width_ + 2*offset; col++)
-					extendedImg[row * extWidth + col] = input_[0 * width_ + (width_ - 1)];
+					extendedImg[row * extWidth + col] = bitstream_[0 * width_ + (width_ - 1)];
 
 	// step 2c: copy lower left corner
 	for(row = offset + height_; row < height_ + 2*offset; row++)
 			for(col = 0; col < offset; col++)
-					extendedImg[row * extWidth + col] = input_[(height_ - 1) * width_ + 0];
+					extendedImg[row * extWidth + col] = bitstream_[(height_ - 1) * width_ + 0];
 
 	// step 2d: copy lower right corner
 	for(row = offset + height_; row < height_ + 2*offset; row++)
 			for(col = offset + width_; col < width_ + 2*offset; col++)
-					extendedImg[row * extWidth + col] = input_[(height_ - 1) * width_ + (width_ - 1)];
+					extendedImg[row * extWidth + col] = bitstream_[(height_ - 1) * width_ + (width_ - 1)];
 
-	return extendedImage;
+	return extendedImg;
 }
 
 
@@ -192,6 +192,8 @@ ImageBitstream & ImageBitstream::operator =(ImageBitstream & original)
 
 	bitstream_ = new unsigned char[width_ * height_];
 	memcpy(bitstream_, original.bitstream_, width_ * height_ * sizeof(unsigned char));
+
+	return *this;
 }
 
 
@@ -237,6 +239,8 @@ unsigned char *ImageBitstream::copyBitstream()
 
 	copy = new unsigned char[width_ * height_];
 	memcpy(copy, bitstream_, width_ * height_ * sizeof(unsigned char));
+
+	return copy;
 }
 
 

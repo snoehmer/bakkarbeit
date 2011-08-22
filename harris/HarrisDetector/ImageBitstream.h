@@ -9,7 +9,10 @@
 #define IMAGEBITSTREAM_H_
 
 #include <cstring>
-class Magick::Image;
+#include <Magick++.h>
+
+using namespace std;
+using namespace Magick;
 
 /**
  * @class ImageBitstream
