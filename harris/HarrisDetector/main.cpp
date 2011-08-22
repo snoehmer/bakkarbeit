@@ -14,7 +14,7 @@ using namespace Magick;
 
 int main(int argc, char **argv)
 {
-    InitializeMagick(NULL);
+    InitializeMagick(0);
 
     // generate demo image
     Image demoImage("11x11", "white");

@@ -88,14 +88,14 @@ unsigned char & ImageBitstream::pixel(int row, int col)
 
 
 
-void ImageBitstream::saveImage(std::string filename)
+void ImageBitstream::saveImage(string filename)
 {
 	if(bitstream_)
 	{
 		Image img;
 
 		img.read(width_, height_, "I", CharPixel, bitstream_);
-		img.write(filename.c_str());
+		img.write(filename);
 	}
 }
 
@@ -103,8 +103,8 @@ void ImageBitstream::saveImage(std::string filename)
 
 void ImageBitstream::setImage(Magick::Image img)
 {
-	width_ = img.geometry().width();
-	height_ = img.geometry().height();
+	width_ = img.size().width();
+	height_ = img.size().height();
 
 	if(bitstream_)
 		delete[] bitstream_;
@@ -178,11 +178,11 @@ unsigned char *ImageBitstream::extendImage(int borderSize)
 }
 
 
-void ImageBitstream::setImage(std::string filename)
+void ImageBitstream::setImage(string filename)
 {
 	Image img;
 
-	img.read(filename.c_str());
+	img.read(filename);
 
 	setImage(img);
 }
@@ -232,7 +232,7 @@ ImageBitstream ImageBitstream::stretchContrast()
 
 
 
-ImageBitstream::ImageBitstream(std::string filename)
+ImageBitstream::ImageBitstream(string filename)
 {
 	setImage(filename);
 }
@@ -255,9 +255,6 @@ ImageBitstream::ImageBitstream(const ImageBitstream & original)
 {
 	width_ = original.width_;
 	height_ = original.height_;
-
-	if(bitstream_ != 0)
-		delete[] bitstream_;
 
 	bitstream_ = new unsigned char[width_ * height_];
 	memcpy(bitstream_, original.bitstream_, width_ * height_ * sizeof(unsigned char));

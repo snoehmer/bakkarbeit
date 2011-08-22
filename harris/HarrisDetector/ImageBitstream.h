@@ -26,13 +26,13 @@ public:
 	ImageBitstream();
 	ImageBitstream(const ImageBitstream &original);  // copy constructor
 	ImageBitstream(Magick::Image img);
-	ImageBitstream(std::string filename);
+	ImageBitstream(string filename);
 	virtual ~ImageBitstream();
 
 	void setImage(Magick::Image img);
-	void setImage(std::string filename);
+	void setImage(string filename);
 	Magick::Image getImage();
-	void saveImage(std::string filename);
+	void saveImage(string filename);
 	bool isLoaded();
 
 	int getWidth();
