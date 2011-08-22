@@ -48,7 +48,7 @@ private:
 	int width_;
 	int height_;
 
-	unsigned char* extendImage();
+	unsigned char* extendImage(int borderSize);
 };
 
 #endif /* IMAGEBITSTREAM_H_ */
