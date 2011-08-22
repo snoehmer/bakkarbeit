@@ -7,6 +7,7 @@
 
 #include <Magick++.h>
 #include "GaussFilter.h"
+#include "ImageBitstream.h"
 
 using namespace std;
 using namespace Magick;
@@ -20,24 +21,14 @@ int main(int argc, char **argv)
     demoImage.pixelColor(5, 5, "red");
     demoImage.write("output/red_pixel.png");
 
-    // load image
-    Image img("output/red_pixel.png");
-    Geometry imgGeom = img.size();
-    unsigned int imgWidth = img.size().width();
-    unsigned int imgHeight = img.size().height();
-
-    // get raw pixel grayscale data from image
-    unsigned char *imgPixels = new unsigned char[imgWidth * imgHeight];  // buffer for grayscale raw image
-
-    img.write(0, 0, imgWidth, imgHeight, "I", CharPixel, imgPixels);
+    ImageBitstream inputImg("output/red_pixel.png");
+    ImageBitstream filteredImg;
 
     // perform harris corner detection
     // step 1: apply a Gauss filter to the image
-    unsigned char *filteredPixels = 0;
     GaussFilter gf(5, 1.0f);
 
-    gf.generateKernel();
-    gf.filterImage(imgPixels, &filteredPixels, imgWidth, imgHeight);
+    filteredImg = gf.filterImage(inputImg);
 
     // step 2: apply Harris operator
 
@@ -45,9 +36,7 @@ int main(int argc, char **argv)
 
 
     // convert raw pixel data back to image
-    Image outputImg;
-    outputImg.read(imgWidth, imgHeight, "I", CharPixel, filteredPixels);
-    outputImg.write("output/result.png");
+    filteredImg.saveImage("output/result.png");
 
     return 0;
 }

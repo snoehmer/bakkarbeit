@@ -33,6 +33,7 @@ public:
 	void setImage(std::string filename);
 	Magick::Image getImage();
 	void saveImage(std::string filename);
+	bool isLoaded();
 
 	int getWidth();
 	int getHeight();
@@ -43,7 +44,7 @@ public:
 	ImageBitstream convolve(float *kernel, int kernelSize);
 	ImageBitstream stretchContrast();
 
-	ImageBitstream& operator=(ImageBitstream& original);
+	ImageBitstream& operator=(const ImageBitstream& original);
 
 private:
 

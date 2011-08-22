@@ -66,6 +66,12 @@ ImageBitstream ImageBitstream::convolve(float *kernel, int kernelSize)
 }
 
 
+bool ImageBitstream::isLoaded()
+{
+	return (bitstream_ != 0);
+}
+
+
 int ImageBitstream::getHeight()
 {
 	return height_;
@@ -182,7 +188,7 @@ void ImageBitstream::setImage(std::string filename)
 }
 
 
-ImageBitstream & ImageBitstream::operator =(ImageBitstream & original)
+ImageBitstream & ImageBitstream::operator =(const ImageBitstream & original)
 {
 	width_ = original.width_;
 	height_ = original.height_;
