@@ -20,6 +20,41 @@ ImageBitstream::ImageBitstream(int width, int height)
 	bitstream_ = new unsigned char[width_ * height_];
 }
 
+ImageBitstream::ImageBitstream(float *original, int width, int height, bool scale)
+{
+	width_ = width;
+	height_ = height;
+
+	bitstream_ = new unsigned char[width_ * height_];
+
+	int row, col;
+
+	if(scale)  // float image should be scaled to fit the uchar range 0...255
+	{
+		float min, max;
+		min = max = original[0];
+
+		for(row = 0; row < height_; row++)
+		{
+			for(col = 0; col < width_; col++)
+			{
+				if(original[row * width_ + col] < min) min = original[row * width_ + col];
+				if(original[row * width_ + col] > max) max = original[row * width_ + col];
+			}
+		}
+
+		for(row = 0; row < height_; row++)
+			for(col = 0; col < width_; col++)
+				bitstream_[row * width_ + col] = (unsigned char) ((original[row * width_ + col] - min) * 255.0f / (max - min));
+	}
+	else  // float image is in range 0.0f...1.0f
+	{
+		for(row = 0; row < height_; row++)
+			for(col = 0; col < width_; col++)
+				bitstream_[row * width_ + col] = (unsigned char) (255.0f * original[row * width_ + col]);
+	}
+}
+
 ImageBitstream ImageBitstream::convolve(float *kernel, int kernelSize)
 {
 	unsigned char *extendedImg;

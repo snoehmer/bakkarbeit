@@ -131,7 +131,6 @@ ImageBitstream HarrisCornerDetector::performHarris(float **hcr, vector<HarrisCor
 
 	// init
 	ImageBitstream extendedImg = input_.extend((kernelSize_ - 1)/ 2);
-	ImageBitstream cornerStrength(width_, height_);
 	cornerPoints.clear();
 
 	// step 1: convolve the image with the derives of Gaussians
@@ -203,8 +202,7 @@ ImageBitstream HarrisCornerDetector::performHarris(float **hcr, vector<HarrisCor
 
 
 	// step 3: calculate Harris corner response and perform thresholding
-	if(hcr)
-		*hcr = new float[width_ * height_];
+	float *hcrIntern = new float[width_ * height_];
 	float Ixx;
 	float Iyy;
 	float Ixy;
@@ -222,19 +220,13 @@ ImageBitstream HarrisCornerDetector::performHarris(float **hcr, vector<HarrisCor
 
 			if(hcrScore > threshold_)
 			{
-				if(hcr)
-					(*hcr)[row * width_ + col] = hcrScore;
-
-				cornerStrength.pixel(row, col) = (unsigned char) hcrScore;
+				hcrIntern[row * width_ + col] = hcrScore;
 
 				cornerPoints.push_back(HarrisCornerPoint(row, col, hcrScore));
 			}
 			else
 			{
-				if(hcr)
-					(*hcr)[row * width_ + col] = 0;
-
-				cornerStrength.pixel(row, col) = 0;
+				hcrIntern[row * width_ + col] = 0;
 			}
 		}
 	}
@@ -243,7 +235,16 @@ ImageBitstream HarrisCornerDetector::performHarris(float **hcr, vector<HarrisCor
 	// step 4: do non-maximum suppression
 	//TODO
 
-	return cornerStrength.stretchContrast();
+	// generate grayscale corner strength image
+	ImageBitstream cornerStrength(hcrIntern, width_, height_);
+
+	// return HCR if user wants to, delete it otherwise
+	if(*hcr)
+		*hcr = hcrIntern;
+	else
+		delete[] hcrIntern;
+
+	return cornerStrength;
 }
 
 float* HarrisCornerDetector::extendImage(float *input, int borderSize)

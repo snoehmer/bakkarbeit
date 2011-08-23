@@ -28,6 +28,7 @@ public:
 	ImageBitstream(Magick::Image img);
 	ImageBitstream(string filename);
 	ImageBitstream(int width, int height);
+	ImageBitstream(float *original, int width, int height, bool scale = true);
 	virtual ~ImageBitstream();
 
 	void setImage(Magick::Image img);

@@ -19,11 +19,11 @@ int main(int argc, char **argv)
     InitializeMagick(0);
 
     // generate demo image
-    Image demoImage("11x11", "white");
-    demoImage.pixelColor(5, 5, "red");
-    demoImage.write("output/red_pixel.png");
+    //Image demoImage("11x11", "white");
+    //demoImage.pixelColor(5, 5, "red");
+    //demoImage.write("output/red_pixel.png");
 
-    ImageBitstream inputImg("output/red_pixel.png");
+    ImageBitstream inputImg("output/pic4.png");
     ImageBitstream filteredImg;
 
     // perform harris corner detection
@@ -40,18 +40,21 @@ int main(int argc, char **argv)
 
     printf("generated output image (%dx%d), found %d corners\n", cornerStrength.getWidth(), cornerStrength.getHeight(), cornerPoints.size());
 
-    printf("corners are:\n");
+    Image input = inputImg.getImage();
 
     for(int i = 0; i < cornerPoints.size(); i++)
-    	printf("corner #%d at (%d, %d) with strength %f\n", i, cornerPoints[i].getCol(), cornerPoints[i].getRow(), cornerPoints[i].getStrength());
+    {
+    	//printf("corner #%d at (%d, %d) with strength %f\n", i, cornerPoints[i].getCol(), cornerPoints[i].getRow(), cornerPoints[i].getStrength());
 
+    	//input.draw(DrawableRectangle())
+    }
 
     // step 3: ...
 
 
     // convert raw pixel data back to image
     //filteredImg.saveImage("output/result.png");
-    cornerStrength.saveImage("output/corners.png");
+    cornerStrength.saveImage("output/cornerstrength.png");
 
     return 0;
 }
